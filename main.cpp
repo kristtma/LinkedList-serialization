@@ -63,10 +63,10 @@ public:
             current = current->next;
         }
 
-        // 1. Записываем размер
+        // Записываем размер
         out.write(reinterpret_cast<char*>(&size_), sizeof(size_));
 
-        // 2. Записываем данные узлов
+        // Записываем данные узлов
         current = head_;
         while (current) {
             int dataLength = current->data.length();
@@ -94,7 +94,7 @@ public:
         vector<ListNode*> nodes(newSize);
         vector<int> randIndices(newSize);
 
-        // 1. Создаем узлы и читаем данные
+        // Создаем узлы и читаем данные
         for (int i = 0; i < newSize; ++i) {
             nodes[i] = new ListNode;
             int len;
@@ -105,14 +105,14 @@ public:
             in.read(reinterpret_cast<char*>(&randIndices[i]), sizeof(randIndices[i]));
         }
 
-        // 2. Восстанавливаем связи next/prev
+        // Восстанавливаем связи next/prev
         head_ = nodes[0];
         tail_ = nodes[newSize - 1];
         for (int i = 0; i < newSize; ++i) {
             if (i > 0) nodes[i]->prev = nodes[i - 1];
             if (i < newSize - 1) nodes[i]->next = nodes[i + 1];
 
-            // 3. Восстанавливаем rand
+            //  Восстанавливаем rand
             if (randIndices[i] != -1) {
                 nodes[i]->rand = nodes[randIndices[i]];
             }
@@ -141,8 +141,8 @@ private:
 };
 
 int main() {
-    // 1. Чтение из inlet.in и построение списка
-    ifstream in("C://lab//lab1//junior-test//inlet.in");
+    // Чтение из inlet.in и построение списка
+    ifstream in("inlet.in");
     if (!in.is_open()) return 1;
 
     List list;
@@ -150,7 +150,7 @@ int main() {
     vector<int> rands;
     vector<ListNode*> nodes;
 
-    // Сначала создаем все узлы (O(N))
+    // Сначала создаем все узлы 
     while (getline(in, line)) {
         size_t sep = line.find_last_of(';'); // Ищем последний разделитель
         if (sep != string::npos) {
@@ -162,7 +162,7 @@ int main() {
     }
     in.close();
 
-    // Заполняем rand связи (O(N))
+    // Заполняем rand связи 
     ListNode* curr = list.GetHead();
     // Собираем указатели в вектор для быстрого доступа по индексу
     while(curr) {
@@ -175,12 +175,12 @@ int main() {
         }
     }
 
-    //2. Сериализация в бинарный файл
-    list.Serialize("C://lab//lab1//junior-test//outlet.out");
+    // Сериализация в бинарный файл
+    list.Serialize("outlet.out");
 
-    // 3. (Опционально для теста) Десериализация
+    // (Опционально для теста) Десериализация
     List newList;
-    newList.Deserialize("C://lab//lab1//junior-test//outlet.out");
+    newList.Deserialize("outlet.out");
     for(int i = 0 ; i < 3;++i){
         std::cout << newList[i] << std::endl;
     }
